@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+input {
+  display: block;
+}
+
+.message {
+  display: none;
+  color: red;
+}
+  
+</style>
+
+<script>
+
+	const userList = [
+  	{ user: 'victor', password: 1234 },
+    { user: 'adrian', password: 2222 },
+    { user: 'luis', password: 3333 }
+  ];
+  
+  function setFormMessage(message) {
+  	const messageBox = document.querySelector('.message');
+  	messageBox.innerHTML = message;
+    messageBox.style.color = 'red';
+    messageBox.style.display = 'block';
+  }
+  
+  function isAValidPassword(password) {
+  	return password.length == 4;
+  }
+  
+  function isFormEmpty(user, password) {
+  	return user == '' || password == '';
+  }
+  
+  function stopExecution(e) {
+    e.preventDefault();
+    return;
+  }
+
+
+	function validateForm(event) {
+    const userValue = document.querySelector('#user').value;
+    const passwordValue = document.querySelector('#password').value;
+    const messageBox = document.querySelector('.message');
+    
+
+    if(isFormEmpty(userValue, passwordValue)) {
+      setFormMessage('Introduce todos los campos');
+      return stopExecution(event);
+    }
+    	
+    if(!isAValidPassword(passwordValue)) {
+      setFormMessage('Formato de password incorrecto');
+     	return stopExecution(event);
+    }
+    
+    let isFormValid = false;
+      
+    if(isAValidPassword(passwordValue)) {
+      userList.forEach(function(element) {
+        const userExist = element.user == userValue && element.password == passwordValue; 
+        if(userExist) {
+          isFormValid = true;
+        }
+      });
+    }
+      
+    if(isFormValid) {
+      setFormMessage('Te has loggeado con éxito!');
+      messageBox.style.color = 'green';
+    } else {
+      setFormMessage('User o password incorrecto');
+    }
+    
+    return stopExecution(event);
+
+
+    
+  }
+</script>
+<body>
+
+ <form onsubmit="validateForm(event)">
+   <input id="user" type="text" placeholder="user">
+   <input id="password" type="password" placeholder="password">
+   <input type="submit" value="Login">
+ </form>
+ 
+ <div class="message"></div>
+
+</body>
+</html>
